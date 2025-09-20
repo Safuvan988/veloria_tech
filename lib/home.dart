@@ -118,13 +118,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// 🏠 Home UI
   Widget _buildHomeScreen() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        toolbarHeight: 70,
-        titleSpacing: 20,
+        toolbarHeight: screenHeight * 0.08,
+        titleSpacing: screenWidth * 0.05,
         title: const Text(
           'Home',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
@@ -141,48 +143,53 @@ class _HomePageState extends State<HomePage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          padding: EdgeInsets.symmetric(
+            horizontal: screenWidth * 0.05,
+            vertical: screenHeight * 0.02,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// 🔍 Search Bar
-              TextFormField(
-                controller: searchController,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: const BorderSide(color: Colors.grey),
+              SizedBox(
+                height: screenHeight * 0.07,
+                child: TextFormField(
+                  controller: searchController,
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5),
+                      borderSide: const BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5),
+                      borderSide: const BorderSide(color: Colors.grey),
+                    ),
+                    hintText: "Search",
+                    hintStyle: const TextStyle(color: Colors.grey),
+                    filled: true,
+                    fillColor: Colors.white,
+                    prefixIcon: const Icon(
+                      Icons.search,
+                      color: Colors.grey,
+                      size: 30,
+                    ),
+                    suffixIcon:
+                        searchController.text.isNotEmpty
+                            ? IconButton(
+                              icon: const Icon(Icons.clear, color: Colors.grey),
+                              onPressed: () {
+                                searchController.clear();
+                                setState(() {});
+                              },
+                            )
+                            : null,
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: const BorderSide(color: Colors.grey),
-                  ),
-                  hintText: "Search",
-                  hintStyle: const TextStyle(color: Colors.grey),
-                  filled: true,
-                  fillColor: Colors.white,
-                  prefixIcon: const Icon(
-                    Icons.search,
-                    color: Colors.grey,
-                    size: 30,
-                  ),
-                  suffixIcon:
-                      searchController.text.isNotEmpty
-                          ? IconButton(
-                            icon: const Icon(Icons.clear, color: Colors.grey),
-                            onPressed: () {
-                              searchController.clear();
-                              setState(() {});
-                            },
-                          )
-                          : null,
                 ),
               ),
-              const SizedBox(height: 20),
 
-              /// 🏷 Category Selector
+              SizedBox(height: screenHeight * 0.02),
+
               SizedBox(
-                height: 50,
+                height: screenHeight * 0.04,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: categories.length,
@@ -191,17 +198,20 @@ class _HomePageState extends State<HomePage> {
                     return GestureDetector(
                       onTap: () => _onCategoryTap(index),
                       child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 6),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 18,
-                          vertical: 10,
+                        margin: EdgeInsets.symmetric(
+                          horizontal: screenWidth * 0.015,
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: screenWidth * 0.05,
+                          vertical: screenHeight * 0.01,
                         ),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: isSelected ? Colors.black : Colors.grey,
                             width: 1.2,
                           ),
+                          color: isSelected ? Colors.black12 : Colors.white,
                         ),
                         alignment: Alignment.center,
                         child: Text(
@@ -216,9 +226,9 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
-              const SizedBox(height: 20),
 
-              /// 📌 Featured Items
+              SizedBox(height: screenHeight * 0.03),
+
               const Text(
                 'Featured Items',
                 style: TextStyle(
@@ -227,10 +237,10 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.black87,
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: screenHeight * 0.02),
 
               SizedBox(
-                height: 250,
+                height: screenHeight * 0.3,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: items.length,
@@ -251,10 +261,10 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       child: Container(
-                        width: 180,
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 10,
+                        width: screenWidth * 0.45,
+                        margin: EdgeInsets.symmetric(
+                          horizontal: screenWidth * 0.02,
+                          vertical: screenHeight * 0.01,
                         ),
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -276,13 +286,13 @@ class _HomePageState extends State<HomePage> {
                               ),
                               child: Image.asset(
                                 item["image"]!,
-                                height: 140,
+                                height: screenHeight * 0.18,
                                 width: double.infinity,
                                 fit: BoxFit.cover,
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: EdgeInsets.all(screenWidth * 0.02),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -293,7 +303,7 @@ class _HomePageState extends State<HomePage> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  const SizedBox(height: 4),
+                                  SizedBox(height: screenHeight * 0.005),
                                   Text(
                                     item["subtitle"]!,
                                     style: TextStyle(
@@ -311,9 +321,8 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: screenHeight * 0.03),
 
-              /// 📌 Popular Rentals
               const Text(
                 "Popular Rentals",
                 style: TextStyle(
@@ -322,16 +331,16 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.black87,
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: screenHeight * 0.02),
 
               GridView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
-                  childAspectRatio: 0.8,
+                  mainAxisSpacing: screenHeight * 0.015,
+                  crossAxisSpacing: screenWidth * 0.03,
+                  childAspectRatio: screenWidth / (screenHeight * .65),
                 ),
                 itemCount: rentalitems.length,
                 itemBuilder: (context, index) {
@@ -371,13 +380,13 @@ class _HomePageState extends State<HomePage> {
                             ),
                             child: Image.asset(
                               item["image"]!,
-                              height: 180,
+                              height: screenHeight * 0.18,
                               width: double.infinity,
                               fit: BoxFit.cover,
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(screenWidth * 0.02),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -388,7 +397,7 @@ class _HomePageState extends State<HomePage> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
+                                SizedBox(height: screenHeight * 0.005),
                                 Text(
                                   item["subtitle"]!,
                                   style: TextStyle(
